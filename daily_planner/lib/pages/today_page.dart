@@ -11,6 +11,7 @@ class TodayPage extends StatefulWidget {
 
 class _TodayPageState extends State<TodayPage> {
   final List<Task> _tasks = [];
+  DateTime _selectedDate = DateTime.now();
 
   void _addTask() async {
     final result = await showDialog<String>(
@@ -27,14 +28,41 @@ class _TodayPageState extends State<TodayPage> {
     });
   }
 
+  void _pickDate() async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: _selectedDate,
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2100),
+    );
+
+    if (picked != null && picked != _selectedDate) {
+      setState(() {
+        _selectedDate = picked;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    final now = DateTime.now();
     final dateText =
-        '${_weekday(now.weekday)}, ${_month(now.month)} ${now.day}';
+        '${_weekday(_selectedDate.weekday)}, ${_month(_selectedDate.month)} ${_selectedDate.day}';
 
     return Scaffold(
-      appBar: AppBar(title: Text(dateText), centerTitle: false),
+      appBar: AppBar(
+        title: GestureDetector(
+          onTap: _pickDate,
+          child: Row(
+            children: [
+              const Icon(Icons.calendar_today_outlined, size: 20),
+              const SizedBox(width: 8),
+              Text(
+                '${_weekday(_selectedDate.weekday)}, ${_month(_selectedDate.month)} ${_selectedDate.day}',
+              ),
+            ],
+          ),
+        ),
+      ),
       body: _tasks.isEmpty
           ? const Center(child: Text('No tasks for today. Tap + to add one!'))
           : ListView.separated(
