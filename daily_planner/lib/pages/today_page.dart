@@ -69,19 +69,36 @@ class _TodayPageState extends State<TodayPage> {
               itemCount: _tasks.length,
               separatorBuilder: (_, __) => const Divider(height: 0),
               itemBuilder: (context, index) {
-                return CheckboxListTile(
-                  value: _tasks[index].isDone,
-                  onChanged: (bool? newValue) {
-                    setState(() {
-                      _tasks[index].isDone = newValue ?? false;
-                    });
-                  },
-                  title: Text(
-                    _tasks[index].title,
-                    style: TextStyle(
-                      decoration: _tasks[index].isDone
-                          ? TextDecoration.lineThrough
-                          : null,
+                return Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 12,
+                  ),
+                  child: Card(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    elevation: 1,
+                    child: CheckboxListTile(
+                      value: _tasks[index].isDone,
+                      onChanged: (bool? newValue) {
+                        setState(() {
+                          _tasks[index].isDone = newValue ?? false;
+                        });
+                      },
+                      title: Text(
+                        _tasks[index].title,
+                        style: TextStyle(
+                          fontSize: 16,
+                          decoration: _tasks[index].isDone
+                              ? TextDecoration.lineThrough
+                              : null,
+                          color: _tasks[index].isDone
+                              ? Colors.grey
+                              : Colors.black,
+                        ),
+                      ),
+                      controlAffinity: ListTileControlAffinity.leading,
                     ),
                   ),
                 );
