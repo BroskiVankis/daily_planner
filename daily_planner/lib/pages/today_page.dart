@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../models/Task.dart';
 import '../widgets/add_task_dialog.dart';
+import '../widgets/task_tile.dart';
 
 class TodayPage extends StatefulWidget {
   const TodayPage({super.key});
@@ -69,38 +70,20 @@ class _TodayPageState extends State<TodayPage> {
               itemCount: _tasks.length,
               separatorBuilder: (_, __) => const Divider(height: 0),
               itemBuilder: (context, index) {
-                return Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 12,
-                  ),
-                  child: Card(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    elevation: 1,
-                    child: CheckboxListTile(
-                      value: _tasks[index].isDone,
-                      onChanged: (bool? newValue) {
-                        setState(() {
-                          _tasks[index].isDone = newValue ?? false;
-                        });
-                      },
-                      title: Text(
-                        _tasks[index].title,
-                        style: TextStyle(
-                          fontSize: 16,
-                          decoration: _tasks[index].isDone
-                              ? TextDecoration.lineThrough
-                              : null,
-                          color: _tasks[index].isDone
-                              ? Colors.grey
-                              : Colors.black,
-                        ),
-                      ),
-                      controlAffinity: ListTileControlAffinity.leading,
-                    ),
-                  ),
+                final task = _tasks[index];
+                return TaskTile(
+                  index: index,
+                  task: task,
+                  onChanged: (value) {
+                    setState(() {
+                      task.isDone = value!;
+                    });
+                  },
+                  onDelete: () {
+                    setState(() {
+                      _tasks.removeAt(index);
+                    });
+                  },
                 );
               },
             ),
