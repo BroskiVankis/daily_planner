@@ -15,17 +15,15 @@ class _TodayPageState extends State<TodayPage> {
   DateTime _selectedDate = DateTime.now();
 
   void _addTask() async {
-    final result = await showDialog<String>(
+    final result = await showDialog<Task>(
       context: context,
       builder: (context) => const AddTaskDialog(),
     );
 
     if (result == null) return;
-    final title = result.trim();
-    if (title.isEmpty) return;
 
     setState(() {
-      _tasks.add(Task(title: title));
+      _tasks.add(result);
     });
   }
 
@@ -58,7 +56,11 @@ class _TodayPageState extends State<TodayPage> {
               const Icon(Icons.calendar_today_outlined, size: 20),
               const SizedBox(width: 8),
               Text(
-                '${_weekday(_selectedDate.weekday)}, ${_month(_selectedDate.month)} ${_selectedDate.day}',
+                dateText,
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ],
           ),
