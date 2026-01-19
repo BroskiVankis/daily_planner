@@ -33,6 +33,17 @@ class _TaskTileState extends State<TaskTile> {
     }
   }
 
+  String _formatTimeRange(TimeOfDay? start, TimeOfDay? end) {
+    if (start == null && end == null) return 'No time set';
+    if (start != null && end != null) {
+      return '${start.format(context)} - ${end.format(context)}';
+    } else if (start != null) {
+      return 'Starts at ${start.format(context)}';
+    } else {
+      return 'Ends at ${end!.format(context)}';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final index = widget.index;
@@ -114,6 +125,30 @@ class _TaskTileState extends State<TaskTile> {
                               color: Colors.grey[700],
                             ),
                           ),
+                          if (task.startTime != null || task.endTime != null)
+                            Padding(
+                              padding: const EdgeInsets.only(top: 4),
+                              child: Row(
+                                children: [
+                                  const Icon(
+                                    Icons.access_time,
+                                    size: 14,
+                                    color: Colors.black54,
+                                  ),
+                                  const SizedBox(width: 4),
+                                  Text(
+                                    _formatTimeRange(
+                                      task.startTime,
+                                      task.endTime,
+                                    ),
+                                    style: TextStyle(
+                                      fontSize: 13,
+                                      color: Colors.grey[800],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
                         ],
                       ),
                     ),
