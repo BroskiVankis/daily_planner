@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'pages/today_page.dart';
+import 'pages/landing_page.dart';
 
 void main() {
   runApp(const DailyPlannerApp());
@@ -35,7 +36,11 @@ class DailyPlannerApp extends StatelessWidget {
           ),
         ),
       ),
-      home: const TodayPage(),
+      initialRoute: '/',
+      routes: {
+        '/': (context) => const LandingPage(),
+        '/today': (context) => const TodayPage(),
+      },
     );
   }
 }
