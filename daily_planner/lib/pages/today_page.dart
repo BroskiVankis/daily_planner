@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../models/Task.dart';
 import '../widgets/add_task_dialog.dart';
 import '../widgets/task_tile.dart';
+import '../widgets/day_view.dart';
 
 class TodayPage extends StatefulWidget {
   const TodayPage({super.key});
@@ -13,6 +14,8 @@ class TodayPage extends StatefulWidget {
 class _TodayPageState extends State<TodayPage> {
   final List<Task> _tasks = [];
   DateTime _selectedDate = DateTime.now();
+  bool _showDayView = false;
+  final double pixelsPerMinute = 1.5;
 
   void _addTask() async {
     final result = await showDialog<Task>(
@@ -65,9 +68,22 @@ class _TodayPageState extends State<TodayPage> {
             ],
           ),
         ),
+        actions: [
+          IconButton(
+            onPressed: () {
+              setState(() {
+                _showDayView = !_showDayView;
+              });
+            },
+            icon: Icon(_showDayView ? Icons.list : Icons.view_day_outlined),
+            tooltip: _showDayView ? 'List View' : 'Day View',
+          ),
+        ],
       ),
       body: _tasks.isEmpty
           ? const Center(child: Text('No tasks for today. Tap + to add one!'))
+          : _showDayView
+          ? DayView(tasks: _tasks, pixelsPerMinute: pixelsPerMinute)
           : ListView.separated(
               itemCount: _tasks.length,
               separatorBuilder: (_, __) => const Divider(height: 0),
